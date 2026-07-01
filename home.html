@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RE·ANALYZE — Hyderabad Real Estate Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #0f1117;
+      --bg2:    #161b27;
+      --bg3:    #1e2535;
+      --border: rgba(99,120,170,.18);
+      --text:   #e2e8f0;
+      --muted:  #64748b;
+      --teal:   #0d9488;
+      --blue:   #3b82f6;
+      --purple: #8b5cf6;
+      --amber:  #f59e0b;
+      --coral:  #f43f5e;
+      --mono:   'JetBrains Mono', monospace;
+      --sans:   'Inter', sans-serif;
+      --r:      8px;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .85rem 2rem;
+      background: rgba(15,17,23,.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--teal);
+      letter-spacing: .05em;
+    }
+    .nav-logo span { color: var(--muted); }
+    .nav-cta {
+      display: flex; gap: .75rem; align-items: center;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .55rem 1.25rem;
+      border-radius: var(--r);
+      font-size: .82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+      border: none;
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--bg3); }
+    .btn-primary {
+      background: var(--teal);
+      color: #fff;
+    }
+    .btn-primary:hover { background: #0f766e; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(13,148,136,.35); }
+
+    /* ── HERO ───────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(13,148,136,.15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(59,130,246,.08) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 40% at 20% 90%, rgba(139,92,246,.07) 0%, transparent 50%);
+    }
+    /* Animated grid overlay */
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(99,120,170,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,120,170,.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 780px; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .35rem .9rem;
+      background: rgba(13,148,136,.12);
+      border: 1px solid rgba(13,148,136,.25);
+      border-radius: 100px;
+      font-size: .72rem;
+      font-family: var(--mono);
+      color: var(--teal);
+      letter-spacing: .04em;
+      margin-bottom: 1.75rem;
+    }
+    .badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--teal);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--teal), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 1.08rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto 2.25rem;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 3.5rem;
+    }
+    .btn-hero {
+      padding: .75rem 2rem;
+      font-size: .92rem;
+      border-radius: 10px;
+    }
+
+    /* Stats strip */
+    .stats-strip {
+      display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: var(--mono);
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--text);
+      display: block;
+    }
+    .stat-lbl {
+      font-size: .68rem;
+      color: var(--muted);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .stat-div {
+      width: 1px;
+      height: 40px;
+      background: var(--border);
+      align-self: center;
+    }
+
+    /* ── FEATURES ───────────────────────────────────────── */
+    .section {
+      padding: 5rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: var(--mono);
+      font-size: .68rem;
+      color: var(--teal);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: .75rem;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: .75rem;
+      letter-spacing: -.02em;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: .92rem;
+      max-width: 480px;
+      margin: 0 auto 3.5rem;
+      line-height: 1.6;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .feature-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      transition: all .25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent, var(--teal));
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .feature-card:hover { border-color: rgba(99,120,170,.35); transform: translateY(-2px); }
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 1.1rem;
+      background: var(--icon-bg, rgba(13,148,136,.12));
+    }
+    .feature-card h3 {
+      font-size: .95rem;
+      font-weight: 600;
+      margin-bottom: .5rem;
+    }
+    .feature-card p {
+      font-size: .8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .feature-tags {
+      display: flex; gap: .4rem; flex-wrap: wrap;
+      margin-top: 1.1rem;
+    }
+    .tag {
+      font-family: var(--mono);
+      font-size: .6rem;
+      padding: .2rem .55rem;
+      border-radius: 4px;
+      background: var(--bg3);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    /* ── HOW IT WORKS ───────────────────────────────────── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    .step {
+      text-align: center;
+      padding: 1.5rem 1rem;
+    }
+    .step-num {
+      font-family: var(--mono);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--bg3);
+      display: block;
+      margin-bottom: .75rem;
+    }
+    .step h4 { font-size: .88rem; font-weight: 600; margin-bottom: .4rem; }
+    .step p { font-size: .76rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── CTA SECTION ────────────────────────────────────── */
+    .cta-section {
+      text-align: center;
+      padding: 5rem 1.5rem 6rem;
+      position: relative;
+    }
+    .cta-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3.5rem 2rem;
+      max-width: 640px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: 50%;
+      transform: translateX(-50%);
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(13,148,136,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-box h2 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin-bottom: .75rem;
+      letter-spacing: -.02em;
+    }
+    .cta-box p {
+      color: var(--muted);
+      font-size: .88rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+    footer .nav-logo { font-size: .85rem; }
+    footer p { font-size: .72rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">RE<span>·</span>ANALYZE</div>
+  <div class="nav-cta">
+    <a href="/login" class="btn btn-ghost">Sign In</a>
+    <a href="/login" class="btn btn-primary">Get Started →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Live RERA &amp; Market Data · Hyderabad
+    </div>
+    <h1>Real Estate Intelligence,<br /><em>Built for Clarity</em></h1>
+    <p>
+      Analyze supply, pricing, regulatory, and infrastructure data across
+      1,000+ Hyderabad localities. Every number is sourced. Every trend is real.
+    </p>
+    <div class="hero-actions">
+      <a href="/login" class="btn btn-primary btn-hero">Open Dashboard →</a>
+      <a href="#features" class="btn btn-ghost btn-hero">See What's Inside</a>
+    </div>
+    <div class="stats-strip">
+      <div class="stat-item">
+        <span class="stat-num">800+</span>
+        <span class="stat-lbl">Localities</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat-item">
+        <span class="stat-num">31K+</span>
+        <span class="stat-lbl">Projects</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat-item">
+        <span class="stat-num">Live</span>
+        <span class="stat-lbl">RERA Data</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat-item">
+        <span class="stat-num">8</span>
+        <span class="stat-lbl">Analysis Tabs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="section-label">What you get</div>
+  <h2 class="section-title">Everything in one place</h2>
+  <p class="section-sub">No spreadsheets. No guesswork. Just clean, structured intelligence for every locality you care about.</p>
+  <div class="feature-grid">
+
+    <div class="feature-card" style="--accent:var(--teal);--icon-bg:rgba(13,148,136,.12)">
+      <div class="feature-icon">⊞</div>
+      <h3>Supply Intelligence</h3>
+      <p>See every active project — units launched, booked, available, priced. Filter by BHK, segment, developer, or RERA status.</p>
+      <div class="feature-tags">
+        <span class="tag">BHK Breakdown</span>
+        <span class="tag">Absorption</span>
+        <span class="tag">Price Range</span>
+      </div>
+    </div>
+
+    <div class="feature-card" style="--accent:var(--blue);--icon-bg:rgba(59,130,246,.12)">
+      <div class="feature-icon">₹</div>
+      <h3>Pricing Intelligence</h3>
+      <p>Track average PSF, price buckets, and segment trends. Compare any locality against the broader market.</p>
+      <div class="feature-tags">
+        <span class="tag">PSF Trends</span>
+        <span class="tag">Price Buckets</span>
+        <span class="tag">Market Avg</span>
+      </div>
+    </div>
+
+    <div class="feature-card" style="--accent:var(--purple);--icon-bg:rgba(139,92,246,.12)">
+      <div class="feature-icon">⚖</div>
+      <h3>Regulatory &amp; RERA</h3>
+      <p>RERA registration status, approvals, authority breakdowns, and flagged litigations — all in one view.</p>
+      <div class="feature-tags">
+        <span class="tag">RERA IDs</span>
+        <span class="tag">GHMC/HMDA</span>
+        <span class="tag">Litigations</span>
+      </div>
+    </div>
+
+    <div class="feature-card" style="--accent:var(--amber);--icon-bg:rgba(245,158,11,.12)">
+      <div class="feature-icon">⊕</div>
+      <h3>Infrastructure Map</h3>
+      <p>Metro stations, schools, hospitals, parks, and lake buffer zones — overlaid on an interactive map for any locality.</p>
+      <div class="feature-tags">
+        <span class="tag">POI Map</span>
+        <span class="tag">Lake Buffers</span>
+        <span class="tag">Metro Access</span>
+      </div>
+    </div>
+
+    <div class="feature-card" style="--accent:var(--coral);--icon-bg:rgba(244,63,94,.12)">
+      <div class="feature-icon">◑</div>
+      <h3>Buyer Persona</h3>
+      <p>Who actually buys in each locality? Income range, employer cluster, preferred BHK, and budget signals from real transaction data.</p>
+      <div class="feature-tags">
+        <span class="tag">Income Range</span>
+        <span class="tag">Employer Mix</span>
+        <span class="tag">BHK Demand</span>
+      </div>
+    </div>
+
+    <div class="feature-card" style="--accent:var(--teal);--icon-bg:rgba(13,148,136,.08)">
+      <div class="feature-icon">◔</div>
+      <h3>Coverage Map</h3>
+      <p>Visualize all 1,049 localities by project density or price band. Click any locality to instantly analyze it.</p>
+      <div class="feature-tags">
+        <span class="tag">Heat Map</span>
+        <span class="tag">Comparison</span>
+        <span class="tag">Click-to-Analyze</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" style="padding-top:0">
+  <div class="section-label">How it works</div>
+  <h2 class="section-title">From locality to insight in seconds</h2>
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">01</span>
+      <h4>Select a locality</h4>
+      <p>Type any of 1,049 Hyderabad localities in the search box</p>
+    </div>
+    <div class="step">
+      <span class="step-num">02</span>
+      <h4>Click Analyze</h4>
+      <p>Data loads instantly from our live MongoDB index — no waiting</p>
+    </div>
+    <div class="step">
+      <span class="step-num">03</span>
+      <h4>Explore every tab</h4>
+      <p>Supply, pricing, regulatory, infra, news — all synced to your selection</p>
+    </div>
+    <div class="step">
+      <span class="step-num">04</span>
+      <h4>Export &amp; share</h4>
+      <p>Download a PDF report or CSV for offline analysis</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-box">
+    <h2>Ready to analyze?</h2>
+    <p>Sign in to access the full dashboard. All data is live, structured, and updated from official RERA and project sources.</p>
+    <a href="/login" class="btn btn-primary btn-hero">Open Dashboard →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="nav-logo">RE<span style="color:var(--muted)">·</span>ANALYZE</div>
+  <p>Hyderabad Real Estate Intelligence Platform · Data sourced from RERA, HMDA, GHMC</p>
+</footer>
+
+</body>
+</html>
